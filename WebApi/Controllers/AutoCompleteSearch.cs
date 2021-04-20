@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +24,9 @@ namespace WebApi.Controllers
         public IEnumerable<PersonCity> Get([FromQuery]string term)
         {
             // simulate a service call...
-            var data = PersonCityData.Data.Where(s => s.FamilyName.StartsWith(term) || s.Name.StartsWith(term));
+            var data = PersonCityData.Data.Where(s => 
+            s.FamilyName.StartsWith(term, StringComparison.CurrentCultureIgnoreCase) 
+            || s.Name.StartsWith(term, StringComparison.CurrentCultureIgnoreCase));
             return data;
         }
     }
