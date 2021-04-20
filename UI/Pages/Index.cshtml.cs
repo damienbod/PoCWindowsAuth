@@ -13,6 +13,7 @@ namespace UI.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly MyDataClientService _myDataClientService;
+        public List<string> DataFromApi;
 
         public IndexModel(MyDataClientService myDataClientService, ILogger<IndexModel> logger)
         {
@@ -22,7 +23,7 @@ namespace UI.Pages
 
         public async Task OnGetAsync()
         {
-            var data = await _myDataClientService.GetMyData();
+            DataFromApi = await _myDataClientService.GetMyData();
         }
     }
 }
