@@ -32,7 +32,7 @@
 <br />
 
 
-<div class="card">
+<div class="card" id="results">
     <h5 class="card-header">
         <span id="docName"></span>
         <span id="docFamilyName"></span>
@@ -49,6 +49,7 @@
     <script type="text/javascript">
         var items;
         $(document).ready(function () {
+            $("#results").hide();
             $("input#autocomplete").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -76,6 +77,7 @@
                     });
                 },
                 select: function (event, ui) {
+                    $("#results").show();
                     $("#docNameId").text(ui.item.data.id);
                     $("#docName").text(ui.item.data.name);
                     $("#docFamilyName").text(ui.item.data.familyName);
