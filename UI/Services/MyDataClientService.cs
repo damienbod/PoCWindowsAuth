@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -24,22 +26,41 @@ namespace UI.Services
         {
             try
             {
-                var client = _clientFactory.CreateClient();
+                //var client = _clientFactory.CreateClient();
 
-                client.BaseAddress = new Uri(_configurations["MyApiUrl"]);
-
-
-                var response = await client.GetAsync("api/MyData");
-                if (response.IsSuccessStatusCode)
+                HttpClientHandler handler = new HttpClientHandler()
                 {
-                    var data = await JsonSerializer.DeserializeAsync<List<string>>(
-                    await response.Content.ReadAsStreamAsync());
+                    UseDefaultCredentials = true
+                };
 
-                    return data;
+                //HttpClient client = new HttpClient(handler);
+
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    client.BaseAddress = new Uri(_configurations["MyApiUrl"]);
+                    var response = await client.GetAsync("api/MyData");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var data = await JsonSerializer.DeserializeAsync<List<string>>(
+                        await response.Content.ReadAsStreamAsync());
+
+                        return data;
+                    }
+
+
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new ApplicationException($"Status code: {response.StatusCode}, Error: {response.ReasonPhrase}, Message: {error}");
                 }
 
-                var error = await response.Content.ReadAsStringAsync();
-                throw new ApplicationException($"Status code: {response.StatusCode}, Error: {response.ReasonPhrase}, Message: {error}");
+                //var response = await client.GetAsync("api/MyData");
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var data = await JsonSerializer.DeserializeAsync<List<string>>(
+                //    await response.Content.ReadAsStreamAsync());
+
+                //    return data;
+                //}
+
             }
             catch (Exception e)
             {
