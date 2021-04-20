@@ -38,7 +38,8 @@ namespace UI.Services
                     return data;
                 }
 
-                throw new ApplicationException($"Status code: {response.StatusCode}, Error: {response.ReasonPhrase}");
+                var error = await response.Content.ReadAsStringAsync();
+                throw new ApplicationException($"Status code: {response.StatusCode}, Error: {response.ReasonPhrase}, Message: {error}");
             }
             catch (Exception e)
             {
