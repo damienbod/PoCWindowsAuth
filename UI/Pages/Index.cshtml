@@ -61,8 +61,8 @@
                             var itemArray = new Array();
                             for (i = 0; i < data.length; i++) {
                                 itemArray[i] = {
-                                    label: data[i].document.name + " " + data[i].document.familyName,
-                                    value: data[i].document.name + " " + data[i].document.familyName,
+                                    label: data[i].name + " " + data[i].familyName,
+                                    value: data[i].name + " " + data[i].familyName,
                                     data: data[i]
                                 }
                             }
@@ -77,11 +77,11 @@
                 },
                 select: function (event, ui) {
                     $("#docNameId").text(ui.item.data.id);
-                    $("#docName").text(ui.item.data.document.name);
-                    $("#docFamilyName").text(ui.item.data.document.familyName);
-                    $("#docInfo").text(ui.item.data.document.info);
-                    $("#docCityCountry").text(ui.item.data.document.cityCountry);
-                    $("#docWeb").text(ui.item.data.document.web);
+                    $("#docName").text(ui.item.data.name);
+                    $("#docFamilyName").text(ui.item.data.familyName);
+                    $("#docInfo").text(ui.item.data.info);
+                    $("#docCityCountry").text(ui.item.data.cityCountry);
+                    $("#docWeb").text(ui.item.data.web);
                     console.log(ui.item);
                 }
             });
