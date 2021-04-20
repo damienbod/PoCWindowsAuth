@@ -26,40 +26,20 @@ namespace UI.Services
         {
             try
             {
-                //var client = _clientFactory.CreateClient();
+                var client = _clientFactory.CreateClient("windowsAuthClient");
+                client.BaseAddress = new Uri(_configurations["MyApiUrl"]);
 
-                HttpClientHandler handler = new HttpClientHandler()
+                var response = await client.GetAsync("api/MyData");
+                if (response.IsSuccessStatusCode)
                 {
-                    UseDefaultCredentials = true
-                };
+                    var data = await JsonSerializer.DeserializeAsync<List<string>>(
+                    await response.Content.ReadAsStreamAsync());
 
-                //HttpClient client = new HttpClient(handler);
-
-                using (HttpClient client = new HttpClient(handler))
-                {
-                    client.BaseAddress = new Uri(_configurations["MyApiUrl"]);
-                    var response = await client.GetAsync("api/MyData");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var data = await JsonSerializer.DeserializeAsync<List<string>>(
-                        await response.Content.ReadAsStreamAsync());
-
-                        return data;
-                    }
-
-
-                    var error = await response.Content.ReadAsStringAsync();
-                    throw new ApplicationException($"Status code: {response.StatusCode}, Error: {response.ReasonPhrase}, Message: {error}");
+                    return data;
                 }
 
-                //var response = await client.GetAsync("api/MyData");
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var data = await JsonSerializer.DeserializeAsync<List<string>>(
-                //    await response.Content.ReadAsStreamAsync());
-
-                //    return data;
-                //}
+                var error = await response.Content.ReadAsStringAsync();
+                throw new ApplicationException($"Status code: {response.StatusCode}, Error: {response.ReasonPhrase}, Message: {error}");
 
             }
             catch (Exception e)

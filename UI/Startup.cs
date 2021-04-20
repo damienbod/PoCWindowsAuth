@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Net.Http;
 using UI.Services;
 
 
@@ -23,6 +24,15 @@ namespace UI
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
             services.AddHttpClient();
+
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                UseDefaultCredentials = true
+            };
+
+            services.AddHttpClient("windowsAuthClient", c =>{ })
+                .ConfigurePrimaryHttpMessageHandler(() => handler);
+
             services.AddScoped<MyDataClientService>();
             services.AddRazorPages();
         }
