@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WebApi;
 
 namespace UI.Services
 {
@@ -33,6 +34,32 @@ namespace UI.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await JsonSerializer.DeserializeAsync<List<string>>(
+                    await response.Content.ReadAsStreamAsync());
+
+                    return data;
+                }
+
+                var error = await response.Content.ReadAsStringAsync();
+                throw new ApplicationException($"Status code: {response.StatusCode}, Error: {response.ReasonPhrase}, Message: {error}");
+
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"Exception {e}");
+            }
+        }
+
+        public async Task<List<PersonCity>> Suggest(string term)
+        {
+            try
+            {
+                var client = _clientFactory.CreateClient("windowsAuthClient");
+                client.BaseAddress = new Uri(_configurations["MyApiUrl"]);
+
+                var response = await client.GetAsync($"api/AutoCompleteSearch?term={term}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = await JsonSerializer.DeserializeAsync<List<PersonCity>>(
                     await response.Content.ReadAsStreamAsync());
 
                     return data;

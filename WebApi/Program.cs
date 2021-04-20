@@ -13,6 +13,7 @@ namespace WebApi
     {
         public static void Main(string[] args)
         {
+            PersonCityData.CreateTestData();
             CreateHostBuilder(args).Build().Run();
         }
 
