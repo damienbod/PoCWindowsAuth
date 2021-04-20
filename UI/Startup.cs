@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using System.Net.Http;
 using UI.Services;
 
-
 namespace UI
 {
     public class Startup
