@@ -14,6 +14,7 @@ namespace UI.Services
     {
         private readonly IConfiguration _configurations;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         public MyDataClientService(
             IConfiguration configurations,
@@ -21,6 +22,10 @@ namespace UI.Services
         {
             _configurations = configurations;
             _clientFactory = clientFactory;
+            _jsonSerializerOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
         }
 
         public async Task<List<string>> GetMyData()
@@ -60,7 +65,7 @@ namespace UI.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await JsonSerializer.DeserializeAsync<List<PersonCity>>(
-                    await response.Content.ReadAsStreamAsync());
+                    await response.Content.ReadAsStreamAsync(), _jsonSerializerOptions);
 
                     return data;
                 }

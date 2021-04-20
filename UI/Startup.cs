@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http;
+using System.Text.Json;
 using UI.Services;
 
 namespace UI
@@ -33,7 +34,8 @@ namespace UI
                 .ConfigurePrimaryHttpMessageHandler(() => handler);
 
             services.AddScoped<MyDataClientService>();
-            services.AddRazorPages();
+            services.AddRazorPages().AddJsonOptions(option =>
+                option.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
