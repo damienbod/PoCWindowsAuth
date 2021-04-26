@@ -6,6 +6,8 @@ Repo shows how an web API and an ASP.NET Core Razor page application can be impl
 
 Securing an ASP.NET Core app and web API using windows authentication
 
+https://damienbod.com/2021/04/26/securing-an-asp-net-core-app-and-web-api-using-windows-authentication/
+
 ## Links
 
 https://stackoverflow.com/questions/36946304/using-windows-authentication-in-asp-net
